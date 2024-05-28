@@ -43,7 +43,6 @@ public class EmployeeService {
 		Employee employee = employeeRepository.load(id);
 		return employee;
 	}
-
 	/**
 	 * 従業員情報を更新します.
 	 * 
