@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.example.domain.Administrator;
 import com.example.form.InsertAdministratorForm;
 import com.example.form.LoginForm;
@@ -75,14 +73,13 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
-	public String insert(@Validated InsertAdministratorForm form, BindingResult result,
-			RedirectAttributes redirectAttributes, Model model) {
+	public String insert(@Validated InsertAdministratorForm form, BindingResult result, Model model) {
 		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(form, administrator);
 		Administrator loginAdministrator = administratorService.findByMailAddress(form.getMailAddress());
 		if (loginAdministrator != null && loginAdministrator.getMailAddress().equals(form.getMailAddress())) {
-			redirectAttributes.addFlashAttribute("errorMessage", "このアカウントは既に登録されています");
-			return "redirect:/toInsert";
+			model.addAttribute("errorMessage", "このアカウントは既に登録されています");
+			return "administrator/insert";
 		}
 		return "redirect:/";
 	}
