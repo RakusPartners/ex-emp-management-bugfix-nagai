@@ -9,8 +9,11 @@ package com.example.form;
 public class LoginForm {
 
 	/** メールアドレス */
+
 	private String mailAddress;
+
 	/** パスワード */
+
 	private String password;
 
 	public String getMailAddress() {
