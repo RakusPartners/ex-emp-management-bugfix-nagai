@@ -86,7 +86,7 @@ public class AdministratorController {
 		administratorService.insert(administrator);
 		return "redirect:/";
 	}
-
+	
 	/////////////////////////////////////////////////////
 	// ユースケース：ログインをする
 	/////////////////////////////////////////////////////
