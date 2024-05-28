@@ -3,6 +3,9 @@ package com.example.controller;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,9 +75,13 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
-	public String insert(InsertAdministratorForm form) {
+	public String insert(@Validated InsertAdministratorForm form, BindingResult result,
+			RedirectAttributes redirectAttributes, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("insertAdministratorForm", form);
+			return "administrator/insert";
+		}
 		Administrator administrator = new Administrator();
-		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
 		return "redirect:/";
@@ -89,7 +96,7 @@ public class AdministratorController {
 	 * @return ログイン画面
 	 */
 	@GetMapping("/")
-	public String toLogin() {
+	public String toLogin(LoginForm form) {
 		return "administrator/login";
 	}
 
@@ -100,12 +107,13 @@ public class AdministratorController {
 	 * @return ログイン後の従業員一覧画面
 	 */
 	@PostMapping("/login")
-	public String login(LoginForm form, RedirectAttributes redirectAttributes) {
+	public String login(LoginForm form, Model model) {
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
 		if (administrator == null) {
-			redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
-			return "redirect:/";
+			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが間違っています");
+			return toLogin(form);
 		}
+		session.setAttribute("administratorName", administrator.getName());
 		return "redirect:/employee/showList";
 	}
 
