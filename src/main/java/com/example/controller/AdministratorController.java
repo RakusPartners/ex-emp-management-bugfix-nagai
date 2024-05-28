@@ -72,11 +72,15 @@ public class AdministratorController {
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
-	public String insert(InsertAdministratorForm form) {
+	public String insert(InsertAdministratorForm form ,RedirectAttributes redirectAttributes) {
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
+		Administrator loginadministrator = administratorService.insert(form.getName(),form.getMailAddress(), form.getPassword());
+		if (loginadministrator==null) {
+			redirectAttributes.addFlashAttribute("errorMessage", "このアカウントは既に登録されています");
+			return "redirect:/";
+		}
 		return "employee/list";
 	}
 

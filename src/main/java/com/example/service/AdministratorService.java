@@ -25,8 +25,12 @@ public class AdministratorService {
 	 * 
 	 * @param administrator 管理者情報
 	 */
-	public void insert(Administrator administrator) {
+	public void insert(Administrator administrator,String name, String mailAddress, String password)  {
 		administratorRepository.insert(administrator);
+		administrator.setName(name);
+		administrator.setMailAddress(mailAddress);
+		administrator.setPassword(password);
+		;
 	}
 
 	/**
