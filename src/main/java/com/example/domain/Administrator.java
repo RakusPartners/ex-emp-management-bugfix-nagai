@@ -3,7 +3,7 @@ package com.example.domain;
 /**
  * 管理者情報を表すドメイン.
  * 
- * @author igamasayuki
+ * 
  * 
  */
 public class Administrator {
